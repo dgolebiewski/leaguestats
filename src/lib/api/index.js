@@ -1,5 +1,5 @@
 //TODO: move to an env variable
-const API_KEY = 'RGAPI-32f54e56-e562-4101-a4cf-98a5ee3cdb39';
+const API_KEY = 'RGAPI-f781027f-e967-48b8-93cc-8430366bb14e';
 const API_BASE_URL = 'https://{region}.api.riotgames.com/lol';
 
 export const fetchRiotApi = async (endpoint, regionPrefix, params) => {

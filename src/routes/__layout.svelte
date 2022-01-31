@@ -1,28 +1,41 @@
 <script context="module">
-	export const load = async ({ url }) => ({
-		props: {
-			location: new URL(url)
-		}
-	});
+	import { locale, loadTranslations } from '$lib/i18n';
+
+	export const load = async ({ url }) => {
+		const _url = new URL(url);
+
+		const defaultLocale = 'en';
+
+		const initLocale = locale.get() || defaultLocale;
+
+		await loadTranslations(initLocale, _url.pathname);
+
+		return {
+			props: {
+				url: _url
+			}
+		};
+	};
 </script>
 
 <script>
+	import { t } from '$lib/i18n';
 	import Header from '$components/Header.svelte';
 	import PageTransition from '$components/PageTransition.svelte';
 	import '../app.css';
 
-	export let location;
+	export let url;
 </script>
 
 <svelte:head>
-	<title>Bootleg OPGG</title>
+	<title>{$t('common.title')}</title>
 </svelte:head>
 
-{#if location.pathname !== '/'}
+{#if url.pathname !== '/'}
 	<Header />
 {/if}
 <div class="container mx-auto">
-	<PageTransition refresh={location.pathname}>
+	<PageTransition refresh={url.pathname}>
 		<slot />
 	</PageTransition>
 </div>

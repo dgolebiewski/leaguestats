@@ -19,7 +19,9 @@
 </script>
 
 <script>
+	import { t } from '$lib/i18n';
 	import Breadcrumbs from '$components/Breadcrumbs.svelte';
+	import RankedPanel from '$components/RankedPanel.svelte';
 	import WinrateChart from '$components/WinrateChart.svelte';
 	import { getProfileIconUrl } from '$lib/util/assets';
 
@@ -31,7 +33,7 @@
 	<Breadcrumbs
 		items={[
 			{
-				label: 'summoner'
+				label: $t('summoner.summoner')
 			},
 			{
 				label: summoner.name,
@@ -39,7 +41,7 @@
 			}
 		]}
 	/>
-	<div class="flex justify-between items-center">
+	<div class="flex justify-between items-center pb-8">
 		<div class="flex">
 			<img
 				class="w-32 h-32 rounded-lg border border-gray-500"
@@ -49,7 +51,9 @@
 			<div class="flex flex-col justify-between items-start ml-4">
 				<div>
 					<h1 class="font-sans-secondary text-2xl font-bold mr-2 mb-1">{summoner.name}</h1>
-					<p class="text-xs font-medium">level {summoner.summonerLevel}</p>
+					<p class="text-xs font-medium">
+						{$t('summoner.level', { value: summoner.summonerLevel })}
+					</p>
 				</div>
 
 				<div class="flex items-center">
@@ -58,12 +62,13 @@
 							<WinrateChart wins={summoner.stats.wins} losses={summoner.stats.losses} />
 						</div>
 					{/if}
-					<span class="text-sm font-medium"
-						>{summoner.stats.wins} wins / {summoner.stats.losses} losses</span
-					>
+					<span class="text-sm font-medium">
+						{$t('summoner.winratio', { wins: summoner.stats.wins, losses: summoner.stats.losses })}
+					</span>
 				</div>
 			</div>
 		</div>
+		<RankedPanel rankedStats={summoner.rankedStats} />
 	</div>
 
 	<pre>{JSON.stringify(summoner, null, 2)}</pre>

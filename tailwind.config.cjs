@@ -28,7 +28,8 @@ const config = {
 		},
 		extend: {
 			fontSize: {
-				xxs: '0.625rem'
+				'2xs': '0.625rem',
+				'3xs': '0.5rem'
 			}
 		}
 	},

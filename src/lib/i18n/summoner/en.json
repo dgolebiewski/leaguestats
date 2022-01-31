@@ -1,0 +1,10 @@
+{
+	"summoner": "summoner",
+	"level": "level {{ value }}",
+	"winratio": "{{ wins }} wins / {{ losses }} losses",
+	"rankedPanel": {
+		"soloQueue": "ranked solo / duo",
+		"flexQueue": "ranked flex",
+		"lp": "{{ value }} lp"
+	}
+}
