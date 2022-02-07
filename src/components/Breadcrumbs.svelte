@@ -15,7 +15,9 @@
 <div class="flex items-center py-5">
 	{#each allItems as item, i}
 		<div
-			class={`leading-6 text-gray-400 transition-colors${item.path ? ' hover:text-gray-300' : ''}`}
+			class={`text-sm leading-6 text-gray-400 transition-colors${
+				item.path ? ' hover:text-gray-300' : ''
+			}`}
 		>
 			{#if item.path}
 				<a href={item.path}>{item.label}</a>

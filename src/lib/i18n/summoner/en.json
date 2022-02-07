@@ -6,5 +6,7 @@
 		"soloQueue": "ranked solo / duo",
 		"flexQueue": "ranked flex",
 		"lp": "{{ value }} lp"
-	}
+	},
+	"recentChampions": "recent champions",
+	"gameCount": "{{ value }} games"
 }

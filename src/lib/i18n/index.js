@@ -18,6 +18,11 @@ export const config = {
 			key: 'summoner',
 			loader: async () => (await import('./summoner/en.json')).default,
 			routes: [/(.{2,4})\/(.+)/i]
+		},
+		{
+			locale: 'en',
+			key: 'error',
+			loader: async () => (await import('./error/en.json')).default
 		}
 	]
 };

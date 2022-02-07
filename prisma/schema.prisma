@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Summoner {
+  id            Int      @id @default(autoincrement())
+  summonerId    String // RiotAPI summoner ID
+  puuid         String // RiotAPI puuid
+  region        String
+  name          String
+  profileIconId Int
+  summonerLevel Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  matches       Match[]
+  rankedStats   Json?
+}
+
+model Match {
+  id           Int                @id @default(autoincrement())
+  summoner     Summoner           @relation(fields: [summonerId], references: [id], onDelete: Cascade)
+  summonerId   Int
+  matchId      String // RiotAPI match ID
+  gameStart    DateTime
+  gameDuration Int
+  gameMode     String
+  gameVersion  String
+  mapId        Int
+  platformId   String
+  queueId      Int
+  teams        MatchTeam[]
+  participants MatchParticipant[]
+}
+
+model MatchTeam {
+  id         Int     @id @default(autoincrement())
+  match      Match   @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  matchId    Int
+  bans       Json?
+  objectives Json?
+  teamId     Int
+  win        Boolean
+}
+
+model MatchParticipant {
+  id            Int    @id @default(autoincrement())
+  match         Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  matchId       Int
+  puuid         String
+  summonerName  String
+  profileIconId Int
+  kills         Int
+  deaths        Int
+  assists       Int
+  challenges    Json?
+  championId    Int
+  championLevel Int
+  items         Json
+  lane          String
+  teamPosition  String
+  teamId        Int
+  perks         Json
+}

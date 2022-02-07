@@ -8,9 +8,10 @@ import EmblemMaster from '$assets/images/ranked-emblems/Emblem_Master.png';
 import EmblemGrandmaster from '$assets/images/ranked-emblems/Emblem_Grandmaster.png';
 import EmblemChallenger from '$assets/images/ranked-emblems/Emblem_Challenger.png';
 import EmblemUnranked from '$assets/images/ranked-emblems/Emblem_Unranked.png';
+import champions from '$assets/json/champion.json';
 
 export const getProfileIconUrl = (iconId) => {
-	return `http://ddragon.leagueoflegends.com/cdn/12.2.1/img/profileicon/${iconId}.png`;
+	return `http://ddragon.leagueoflegends.com/cdn/12.3.1/img/profileicon/${iconId}.png`;
 };
 
 export const getRankedEmblemUrl = (tier) => {
@@ -36,4 +37,12 @@ export const getRankedEmblemUrl = (tier) => {
 		default:
 			return EmblemUnranked;
 	}
+};
+
+export const getChampionByKey = (key) => {
+	return Object.values(champions.data).find((c) => c.key == key);
+};
+
+export const getChampionSquareImageUrl = (id) => {
+	return `http://ddragon.leagueoflegends.com/cdn/12.3.1/img/champion/${id}.png`;
 };

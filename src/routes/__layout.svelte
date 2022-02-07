@@ -22,7 +22,7 @@
 	import { t } from '$lib/i18n';
 	import Header from '$components/Header.svelte';
 	import PageTransition from '$components/PageTransition.svelte';
-	import '../app.css';
+	import '$assets/app.css';
 
 	export let url;
 </script>
@@ -34,8 +34,6 @@
 {#if url.pathname !== '/'}
 	<Header />
 {/if}
-<div class="container mx-auto">
-	<PageTransition refresh={url.pathname}>
-		<slot />
-	</PageTransition>
-</div>
+<PageTransition refresh={url.pathname}>
+	<slot />
+</PageTransition>

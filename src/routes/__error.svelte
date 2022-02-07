@@ -8,10 +8,10 @@
 </script>
 
 <script>
+	import { t } from '$lib/i18n';
 	import errorImage from '$assets/images/error.png';
 	import Header from '$components/Header.svelte';
 
-	export let error;
 	export let status;
 </script>
 
@@ -22,17 +22,15 @@
 		{status}
 	</h2>
 	<h1 class="text-4xl font-bold font-sans-secondary mb-2 text-center">
-		{#if status === 404}
-			how did you get here?
-		{:else if status === 401}
-			hmmm... you're not supposed to be here
+		{#if [401, 404].includes(status)}
+			{$t(`error.${status}`)}
 		{:else}
-			whoops... an error occured.
+			{$t(`error.generic`)}
 		{/if}
 	</h1>
 	<h3>
 		<a class="text-teal-500 hover:text-teal-400 transition-colors text-center" href="/"
-			>back to the home page</a
+			>{$t('error.backToHome')}</a
 		>
 	</h3>
 </div>
