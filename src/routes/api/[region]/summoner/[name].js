@@ -12,6 +12,12 @@ export const get = async ({ params }) => {
 
 	let summoner = await fetchSummoner(region, params.name);
 
+	if (!summoner) {
+		return {
+			status: 404
+		};
+	}
+
 	summoner.matches = await fetchMatches(region, params.name);
 
 	return {

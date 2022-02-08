@@ -39,21 +39,19 @@ export const getSummonerRecentChampions = (summoner, maxCount = 3) => {
 
 	summoner.matches.forEach((match) => {
 		const participant = match.participants.find((p) => p.puuid === summoner.puuid);
-		if (!participant) {
-			return;
-		}
+		if (!participant) return;
+
+		const team = match.teams.find((t) => t.teamId === participant.teamId);
+
+		if (!team) return;
 
 		let champStats = recentChamps.find((c) => c.champion.key == participant.championId);
 
 		if (!champStats) {
-			if (recentChamps.length >= maxCount) {
-				return;
-			}
-
 			champStats = {
 				champion: getChampionByKey(participant.championId),
 				gameCount: 1,
-				wins: participant.win ? 1 : 0,
+				wins: team.win ? 1 : 0,
 				kills: participant.kills,
 				deaths: participant.deaths,
 				assists: participant.assists
@@ -62,12 +60,49 @@ export const getSummonerRecentChampions = (summoner, maxCount = 3) => {
 			recentChamps.push(champStats);
 		} else {
 			champStats.gameCount += 1;
-			champStats.wins += participant.win ? 1 : 0;
+			champStats.wins += team.win ? 1 : 0;
 			champStats.kills += participant.kills;
 			champStats.deaths += participant.deaths;
 			champStats.assists += participant.assists;
 		}
 	});
 
-	return recentChamps;
+	recentChamps.sort((a, b) => b.gameCount - a.gameCount);
+
+	return recentChamps.slice(0, maxCount);
+};
+
+export const getSummonerRecentTeammates = (summoner) => {
+	let teammates = [];
+
+	summoner.matches.forEach((match) => {
+		const participant = match.participants.find((p) => p.puuid === summoner.puuid);
+		if (!participant) return;
+
+		const team = match.teams.find((t) => t.teamId === participant.teamId);
+		if (!team) return;
+		const _teammates = match.participants.filter(
+			(p) => p.teamId === participant.teamId && p.puuid !== summoner.puuid
+		);
+		_teammates.forEach((teammate) => {
+			const existing = teammates.find((t) => t.puuid === teammate.puuid);
+			if (!existing) {
+				teammates.push({
+					puuid: teammate.puuid,
+					name: teammate.summonerName,
+					profileIconId: teammate.profileIconId,
+					gameCount: 1,
+					wins: team.win ? 1 : 0
+				});
+			} else {
+				existing.gameCount++;
+				existing.wins += team.win ? 1 : 0;
+			}
+		});
+	});
+
+	teammates = teammates.filter((t) => t.gameCount > 1);
+	teammates.sort((a, b) => b.gameCount - a.gameCount);
+
+	return teammates;
 };

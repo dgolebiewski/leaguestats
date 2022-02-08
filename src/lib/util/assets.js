@@ -9,6 +9,7 @@ import EmblemGrandmaster from '$assets/images/ranked-emblems/Emblem_Grandmaster.
 import EmblemChallenger from '$assets/images/ranked-emblems/Emblem_Challenger.png';
 import EmblemUnranked from '$assets/images/ranked-emblems/Emblem_Unranked.png';
 import champions from '$assets/json/champion.json';
+import summonerSpells from '$assets/json/summoner.json';
 
 export const getProfileIconUrl = (iconId) => {
 	return `http://ddragon.leagueoflegends.com/cdn/12.3.1/img/profileicon/${iconId}.png`;
@@ -45,4 +46,12 @@ export const getChampionByKey = (key) => {
 
 export const getChampionSquareImageUrl = (id) => {
 	return `http://ddragon.leagueoflegends.com/cdn/12.3.1/img/champion/${id}.png`;
+};
+
+export const getSummonerSpellByKey = (key) => {
+	return Object.values(summonerSpells.data).find((s) => s.key == key);
+};
+
+export const getSummonerSpellImageUrl = (id) => {
+	return `http://ddragon.leagueoflegends.com/cdn/12.3.1/img/spell/${id}.png`;
 };

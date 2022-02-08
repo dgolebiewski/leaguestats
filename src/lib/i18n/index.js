@@ -17,7 +17,13 @@ export const config = {
 			locale: 'en',
 			key: 'summoner',
 			loader: async () => (await import('./summoner/en.json')).default,
-			routes: [/(.{2,4})\/(.+)/i]
+			routes: [/(.{2,4})\/summoner\/(.+)/i]
+		},
+		{
+			locale: 'en',
+			key: 'match',
+			loader: async () => (await import('./match/en.json')).default,
+			routes: [/(.{2,4})\/summoner\/(.+)/i]
 		},
 		{
 			locale: 'en',

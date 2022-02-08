@@ -188,6 +188,7 @@ export const fetchMatches = async (region, summonerName, options = {}) => {
 				kills: participant.kills,
 				deaths: participant.deaths,
 				assists: participant.assists,
+				totalMinionsKilled: participant.totalMinionsKilled,
 				challenges: participant.challenges,
 				championId: participant.championId,
 				championLevel: participant.champLevel,
@@ -195,14 +196,14 @@ export const fetchMatches = async (region, summonerName, options = {}) => {
 				lane: participant.lane,
 				teamId: participant.teamId,
 				teamPosition: participant.teamPosition,
+				summonerSpell1Id: participant.summoner1Id,
+				summonerSpell2Id: participant.summoner2Id,
 				perks: participant.perks
 			}))
 		);
 
 		return acc;
 	}, []);
-
-	// console.log(teams, matches);
 
 	await Promise.all([
 		prisma.matchTeam.createMany({

@@ -1,0 +1,11 @@
+{
+	"victory": "VICTORY",
+	"defeat": "DEFEAT",
+	"queueType": {
+		"400": "normal draft",
+		"420": "ranked solo / duo",
+		"430": "normal blind",
+		"440": "ranked flex",
+		"450": "ARAM"
+	}
+}

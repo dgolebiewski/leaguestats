@@ -24,14 +24,23 @@
 	import Breadcrumbs from '$components/Breadcrumbs.svelte';
 	import RankedPanel from '$components/RankedPanel.svelte';
 	import WinrateChart from '$components/WinrateChart.svelte';
-	import { getChampionSquareImageUrl, getProfileIconUrl } from '$lib/util/assets';
-	import { getSummonerRecentChampions, getSummonerStats } from '$lib/util/summoner';
+	import { getProfileIconUrl } from '$lib/util/assets';
+	import {
+		getSummonerRecentChampions,
+		getSummonerRecentTeammates,
+		getSummonerStats
+	} from '$lib/util/summoner';
+	import RecentChampions from '$components/RecentChampions.svelte';
+	import RecentTeammates from '$components/RecentTeammates.svelte';
+	import Spinner from '$components/Spinner.svelte';
+	import MatchPanel from '$components/MatchPanel.svelte';
 
 	export let summoner;
 	export let region;
 
 	$: stats = getSummonerStats(summoner);
 	$: recentChampions = getSummonerRecentChampions(summoner);
+	$: recentTeammates = getSummonerRecentTeammates(summoner);
 </script>
 
 <div class="container mx-auto mt-16">
@@ -46,8 +55,8 @@
 			}
 		]}
 	/>
-	<div class="flex justify-between items-center pb-8">
-		<div class="flex">
+	<div class="lg:flex justify-between items-center pb-8">
+		<div class="flex mb-4 lg:mb-0">
 			<img
 				class="w-32 h-32 rounded-lg border border-gray-500"
 				src={getProfileIconUrl(summoner.profileIconId)}
@@ -75,7 +84,6 @@
 		</div>
 		<RankedPanel rankedStats={summoner.rankedStats} />
 	</div>
-	<!-- <pre>{JSON.stringify(recentChampions, null, 2)}</pre> -->
 	<!-- <pre>{JSON.stringify(summoner, null, 2)}</pre> -->
 </div>
 
@@ -83,28 +91,19 @@
 	<div class="container mx-auto">
 		<div class="grid grid-cols-12 gap-10">
 			<div class="col-span-3">
-				<div class="py-3 px-4 bg-gray-800 rounded-lg w-100">
-					<h4 class="text-center mb-2">{$t('summoner.recentChampions')}</h4>
-					{#each recentChampions as item}
-						<div class="flex justify-between py-1">
-							<div class="flex">
-								<img
-									class="block w-10 h-10 mr-2 rounded-lg border border-gray-500"
-									src={getChampionSquareImageUrl(item.champion.id)}
-									alt="champion square art"
-								/>
-								<div class="flex flex-col justify-between">
-									<h5 class="font-bold uppercase text-sm">{item.champion.name}</h5>
-									<p class="text-xs leading-tight">
-										{$t('summoner.gameCount', { value: item.gameCount })}
-									</p>
-								</div>
-							</div>
-						</div>
-					{/each}
-				</div>
+				<RecentChampions {recentChampions} />
+
+				{#if recentTeammates && recentTeammates.length}
+					<div class="h-4" />
+					<RecentTeammates {recentTeammates} />
+				{/if}
 			</div>
-			<div class="col-span-9" />
+			<div class="col-span-9">
+				{#each summoner.matches as match}
+					<MatchPanel {match} summonerPuuid={summoner.puuid} />
+				{/each}
+				<Spinner />
+			</div>
 		</div>
 	</div>
 </div>

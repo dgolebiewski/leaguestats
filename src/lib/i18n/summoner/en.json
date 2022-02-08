@@ -8,5 +8,8 @@
 		"lp": "{{ value }} lp"
 	},
 	"recentChampions": "recent champions",
-	"gameCount": "{{ value }} games"
+	"gameCount": "{{ value }} games",
+	"winrate": "{{ value }}% WR",
+	"kda": "{{ value }} KDA",
+	"recentTeammates": "recent teammates"
 }
