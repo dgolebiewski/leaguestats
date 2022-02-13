@@ -71,4 +71,5 @@ model MatchParticipant {
   summonerSpell1Id   Int?
   summonerSpell2Id   Int?
   perks              Json?
+  visionScore        Int
 }

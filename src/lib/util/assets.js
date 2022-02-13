@@ -10,6 +10,10 @@ import EmblemChallenger from '$assets/images/ranked-emblems/Emblem_Challenger.pn
 import EmblemUnranked from '$assets/images/ranked-emblems/Emblem_Unranked.png';
 import champions from '$assets/json/champion.json';
 import summonerSpells from '$assets/json/summoner.json';
+import runes from '$assets/json/runesReforged.json';
+
+const runeImages = import.meta.glob('/src/assets/images/perk-images/Styles/**/*.png');
+const styleImages = import.meta.glob('/src/assets/images/perk-images/Styles/*.png');
 
 export const getProfileIconUrl = (iconId) => {
 	return `http://ddragon.leagueoflegends.com/cdn/12.3.1/img/profileicon/${iconId}.png`;
@@ -54,4 +58,30 @@ export const getSummonerSpellByKey = (key) => {
 
 export const getSummonerSpellImageUrl = (id) => {
 	return `http://ddragon.leagueoflegends.com/cdn/12.3.1/img/spell/${id}.png`;
+};
+
+export const getRuneImageUrl = async (styleId, id) => {
+	const style = runes.find((r) => r.id == styleId);
+
+	if (!style) return null;
+
+	const rune = style.slots
+		.reduce((acc, curr) => acc.concat(curr.runes), [])
+		.find((r) => r.id == id);
+
+	const url = await runeImages[`/src/assets/images/${rune.icon}`]();
+
+	return url.default;
+};
+
+export const getStyleImageUrl = async (id) => {
+	const style = runes.find((r) => r.id == id);
+
+	const url = await styleImages[`/src/assets/images/${style.icon}`]();
+
+	return url.default;
+};
+
+export const getItemImageUrl = (id) => {
+	return `http://ddragon.leagueoflegends.com/cdn/12.3.1/img/item/${id}.png`;
 };

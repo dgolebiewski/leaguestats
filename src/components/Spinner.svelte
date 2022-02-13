@@ -16,13 +16,13 @@
 				break;
 		}
 	}
-	$: offset = size === 'small' ? '2' : '4';
+	$: offsetClasses = size === 'small' ? 'top-[-2px] left-[-2px]' : 'top-[-4px] left-[-4px]';
 </script>
 
 <div class="flex justify-center items-center">
 	<div class={`border-white border-opacity-40 rounded-full relative ${classes}`}>
 		<div
-			class={`absolute top-[-${offset}px] left-[-${offset}px] animate-spin inline-block order-transparent border-t-white rounded-full ${classes}`}
+			class={`absolute animate-spin inline-block border-transparent border-t-white rounded-full ${offsetClasses} ${classes}`}
 			role="status"
 		/>
 	</div>

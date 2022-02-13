@@ -9,6 +9,7 @@ const config = {
 		extend: {
 			colors: {
 				gray: {
+					950: '#121212',
 					900: '#1C1C1C',
 					800: '#1F1F1F',
 					700: '#333333',
@@ -26,10 +27,7 @@ const config = {
 				'defeat-red': '#E83636',
 				'team-blue': '#0066FF',
 				'team-red': '#FF0000',
-				transparent: '#00000000',
-				gold: '#FFC907',
-				white: '#FFFFFF',
-				black: '#000000'
+				gold: '#FFC907'
 			},
 			fontSize: {
 				'2xs': '0.625rem',

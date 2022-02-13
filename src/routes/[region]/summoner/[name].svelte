@@ -34,6 +34,7 @@
 	import RecentTeammates from '$components/RecentTeammates.svelte';
 	import Spinner from '$components/Spinner.svelte';
 	import MatchPanel from '$components/MatchPanel.svelte';
+	import Footer from '$components/Footer.svelte';
 
 	export let summoner;
 	export let region;
@@ -107,3 +108,5 @@
 		</div>
 	</div>
 </div>
+
+<Footer />

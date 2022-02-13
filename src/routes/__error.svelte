@@ -1,10 +1,14 @@
 <script context="module">
-	export const load = ({ error, status }) => ({
-		props: {
-			error,
-			status
-		}
-	});
+	export const load = ({ error, status }) => {
+		console.error(error);
+
+		return {
+			props: {
+				error,
+				status
+			}
+		};
+	};
 </script>
 
 <script>

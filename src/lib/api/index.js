@@ -87,6 +87,9 @@ export const fetchMatches = async (region, summonerName, options = {}) => {
 					include: {
 						teams: true,
 						participants: true
+					},
+					orderBy: {
+						gameStart: 'asc'
 					}
 				}
 			}
@@ -198,7 +201,8 @@ export const fetchMatches = async (region, summonerName, options = {}) => {
 				teamPosition: participant.teamPosition,
 				summonerSpell1Id: participant.summoner1Id,
 				summonerSpell2Id: participant.summoner2Id,
-				perks: participant.perks
+				perks: participant.perks,
+				visionScore: participant.visionScore
 			}))
 		);
 

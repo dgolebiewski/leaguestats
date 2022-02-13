@@ -7,5 +7,9 @@
 		"430": "normal blind",
 		"440": "ranked flex",
 		"450": "ARAM"
-	}
+	},
+	"kda": "KDA",
+	"cs": "CS",
+	"csm": "CS/m",
+	"vs": "VS"
 }
