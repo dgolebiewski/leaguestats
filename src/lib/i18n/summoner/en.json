@@ -11,5 +11,6 @@
 	"gameCount": "{{ value }} games",
 	"winrate": "{{ value }}% WR",
 	"kda": "{{ value }} KDA",
-	"recentTeammates": "recent teammates"
+	"recentTeammates": "recent teammates",
+	"refresh": "refresh"
 }

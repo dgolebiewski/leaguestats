@@ -21,3 +21,9 @@ export const formatTime = (value) => {
 
 	return hours + ':' + minutes + ':' + seconds;
 };
+
+export const formatDate = (value) => {
+	const date = new Date(value);
+
+	return date.toLocaleString();
+};

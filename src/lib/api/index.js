@@ -32,13 +32,23 @@ export const fetchRiotApi = async (endpoint, regionPrefix, params) => {
 	return json;
 };
 
-export const fetchSummoner = async (region, summonerName) => {
+export const fetchSummoner = async (region, summonerName, refresh = false) => {
 	let summoner = await prisma.summoner.findFirst({
 		where: {
 			name: summonerName,
 			region: region.platformPrefix
 		}
 	});
+
+	if (refresh && summoner) {
+		await prisma.summoner.delete({
+			where: {
+				id: summoner.id
+			}
+		});
+
+		summoner = null;
+	}
 
 	if (!summoner) {
 		summoner = await fetchRiotApi(

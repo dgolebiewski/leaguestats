@@ -5,10 +5,11 @@
 
 	import SidebarPanel from './SidebarPanel.svelte';
 
+	export let loading = false;
 	export let recentTeammates = [];
 </script>
 
-<SidebarPanel title={$t('summoner.recentTeammates')}>
+<SidebarPanel {loading} title={$t('summoner.recentTeammates')}>
 	{#each recentTeammates as teammate}
 		<div class="flex justify-between items-center mb-2">
 			<div class="flex">

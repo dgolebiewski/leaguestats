@@ -12,6 +12,7 @@
 	import { formatTime } from '$lib/util/time';
 	import { onMount } from 'svelte';
 
+	export let loading = false;
 	export let match;
 	export let summonerPuuid;
 
@@ -54,54 +55,57 @@
 
 <div
 	class="flex justify-between bg-gray-800 rounded-lg p-4 shadow-md hover:shadow-lg transition-all mb-6"
+	class:animate-pulse={loading}
 >
-	<div class="flex mr-4">
-		<div class="mr-2">
-			<img
-				class="block w-16 h-16 rounded-lg border border-gray-500 mb-2"
-				src={getChampionSquareImageUrl(myChampion.id)}
-				alt="champion square art"
-			/>
-			<div class="flex justify-between px-1">
-				{#each getSummonerSpells() as spell}
-					<img
-						class="block w-6 h-6 rounded-md"
-						src={spell.imageUrl}
-						alt={`summoner spell - ${spell.name}`}
-					/>
+	<div class="flex">
+		<div class="flex mr-4">
+			<div class="mr-2">
+				<img
+					class="block w-16 h-16 rounded-lg border border-gray-500 mb-2"
+					src={getChampionSquareImageUrl(myChampion.id)}
+					alt="champion square art"
+				/>
+				<div class="flex justify-between px-1">
+					{#each getSummonerSpells() as spell}
+						<img
+							class="block w-6 h-6 rounded-md"
+							src={spell.imageUrl}
+							alt={`summoner spell - ${spell.name}`}
+						/>
+					{/each}
+				</div>
+			</div>
+			{#if mainRuneImage && secondaryStyleImage}
+				<div class="flex flex-col items-center">
+					<img class="w-8 h-8 mb-2" src={mainRuneImage} alt="main rune" />
+					<img class="w-4 h-4" src={secondaryStyleImage} alt="secondary style" />
+				</div>
+			{/if}
+		</div>
+		<div class="flex flex-col">
+			<h3
+				class={`text-xl leading-6 font-bold font-sans-secondary ${
+					myTeam.win ? 'text-victory-blue' : 'text-defeat-red'
+				}`}
+			>
+				{myTeam.win ? $t('match.victory') : $t('match.defeat')}
+			</h3>
+			<p class="text-xs leading-6 font-medium mb-1 text-gray-400">
+				{$t(`match.queueType.${match.queueId}`)}
+			</p>
+			<p class="text-xs text-white font-bold mb-3">
+				<i class="uil uil-clock" />
+				{formatTime(match.gameDuration)}
+			</p>
+			<div class="flex items-center mt-auto">
+				{#each me.items as item}
+					<div class="h-8 w-8 rounded-md bg-gray-950 mr-1">
+						{#if item}
+							<img class="h-8 w-8 rounded-md" src={getItemImageUrl(item)} alt="item" />
+						{/if}
+					</div>
 				{/each}
 			</div>
-		</div>
-		{#if mainRuneImage && secondaryStyleImage}
-			<div class="flex flex-col items-center">
-				<img class="w-8 h-8 mb-2" src={mainRuneImage} alt="main rune" />
-				<img class="w-4 h-4" src={secondaryStyleImage} alt="secondary style" />
-			</div>
-		{/if}
-	</div>
-	<div class="flex flex-col">
-		<h3
-			class={`text-xl leading-6 font-bold font-sans-secondary ${
-				myTeam.win ? 'text-victory-blue' : 'text-defeat-red'
-			}`}
-		>
-			{myTeam.win ? $t('match.victory') : $t('match.defeat')}
-		</h3>
-		<p class="text-xs leading-6 font-medium mb-1 text-gray-400">
-			{$t(`match.queueType.${match.queueId}`)}
-		</p>
-		<p class="text-xs text-white font-bold mb-3">
-			<i class="uil uil-clock" />
-			{formatTime(match.gameDuration)}
-		</p>
-		<div class="flex items-center mt-auto">
-			{#each me.items as item}
-				<div class="h-8 w-8 rounded-md bg-gray-950 mr-1">
-					{#if item}
-						<img class="h-8 w-8 rounded-md" src={getItemImageUrl(item)} alt="item" />
-					{/if}
-				</div>
-			{/each}
 		</div>
 	</div>
 	<table class="mt-auto">

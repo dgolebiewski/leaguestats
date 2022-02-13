@@ -3,6 +3,7 @@
 
 	import { getRankedEmblemUrl } from '$lib/util/assets';
 
+	export let loading = false;
 	export let rankedStats = [];
 
 	const RANKED_SOLO_KEY = 'RANKED_SOLO_5x5';
@@ -14,6 +15,7 @@
 
 <div
 	class="bg-gray-700 rounded-lg flex justify-center lg:justify-start px-8 py-2 shadow-md hover:shadow-lg transition-all"
+	class:animate-pulse={loading}
 >
 	<div class="flex items-center justify-center pr-6 py-2 border-r border-gray-600">
 		<img

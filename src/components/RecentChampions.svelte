@@ -4,10 +4,11 @@
 	import { getWinrateTextColor } from '$lib/util/style';
 	import SidebarPanel from './SidebarPanel.svelte';
 
+	export let loading = false;
 	export let recentChampions = [];
 </script>
 
-<SidebarPanel title={$t('summoner.recentChampions')}>
+<SidebarPanel {loading} title={$t('summoner.recentChampions')}>
 	{#each recentChampions as item}
 		<div class="flex justify-between py-1">
 			<div class="flex">

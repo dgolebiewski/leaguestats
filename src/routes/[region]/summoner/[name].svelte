@@ -35,9 +35,29 @@
 	import Spinner from '$components/Spinner.svelte';
 	import MatchPanel from '$components/MatchPanel.svelte';
 	import Footer from '$components/Footer.svelte';
+	import Button from '$components/Button.svelte';
+	import { formatDate } from '$lib/util/time';
 
 	export let summoner;
 	export let region;
+
+	let isRefreshing = false;
+
+	const refresh = async () => {
+		if (isRefreshing) {
+			return;
+		}
+
+		isRefreshing = true;
+
+		const response = await fetch(`/api/${region}/summoner/${summoner.name}?refresh=1`);
+
+		if (response.ok) {
+			summoner = (await response.json()).summoner;
+		}
+
+		isRefreshing = false;
+	};
 
 	$: stats = getSummonerStats(summoner);
 	$: recentChampions = getSummonerRecentChampions(summoner);
@@ -73,17 +93,28 @@
 
 				<div class="flex items-center">
 					{#if stats.total > 0}
-						<div class="w-12 h-12 mr-2">
-							<WinrateChart wins={stats.wins} losses={stats.losses} />
+						<div class="flex items-center mr-3">
+							<div class="w-12 h-12 mr-2">
+								<WinrateChart wins={stats.wins} losses={stats.losses} />
+							</div>
+							<span class="text-sm font-medium">
+								{$t('summoner.winratio', { wins: stats.wins, losses: stats.losses })}
+							</span>
 						</div>
 					{/if}
-					<span class="text-sm font-medium">
-						{$t('summoner.winratio', { wins: stats.wins, losses: stats.losses })}
-					</span>
+					<Button on:click={refresh} size="sm" color="dark" shadow={false}>
+						<div class="flex items-center justify-center">
+							<i class="uil uil-redo ml-[-4px] mr-2" class:animate-spin={isRefreshing} />
+							<div>
+								<p class="text-left text-sm font-bold">{$t('summoner.refresh')}</p>
+								<p class="text-gray-400 text-xs font-normal">{formatDate(summoner.updatedAt)}</p>
+							</div>
+						</div>
+					</Button>
 				</div>
 			</div>
 		</div>
-		<RankedPanel rankedStats={summoner.rankedStats} />
+		<RankedPanel loading={isRefreshing} rankedStats={summoner.rankedStats} />
 	</div>
 	<!-- <pre>{JSON.stringify(summoner, null, 2)}</pre> -->
 </div>
@@ -92,16 +123,16 @@
 	<div class="container mx-auto">
 		<div class="grid grid-cols-12 gap-10">
 			<div class="col-span-3">
-				<RecentChampions {recentChampions} />
+				<RecentChampions loading={isRefreshing} {recentChampions} />
 
 				{#if recentTeammates && recentTeammates.length}
 					<div class="h-4" />
-					<RecentTeammates {recentTeammates} />
+					<RecentTeammates loading={isRefreshing} {recentTeammates} />
 				{/if}
 			</div>
 			<div class="col-span-9">
 				{#each summoner.matches as match}
-					<MatchPanel {match} summonerPuuid={summoner.puuid} />
+					<MatchPanel loading={isRefreshing} {match} summonerPuuid={summoner.puuid} />
 				{/each}
 				<Spinner />
 			</div>
