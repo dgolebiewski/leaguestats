@@ -11,6 +11,7 @@
 	} from '$lib/util/assets';
 	import { formatTime } from '$lib/util/time';
 	import { onMount } from 'svelte';
+	import StatTable from './StatTable.svelte';
 
 	export let loading = false;
 	export let match;
@@ -29,14 +30,41 @@
 		.filter((p) => p.teamId === 200)
 		.map((p) => ({ ...p, champion: getChampionByKey(p.championId) }));
 
-	const getSummonerSpells = () => {
-		return [1, 2].map((n) => {
-			const spell = getSummonerSpellByKey(me[`summonerSpell${n}Id`]);
+	$: summonerSpells = [1, 2].map((n) => {
+		const spell = getSummonerSpellByKey(me[`summonerSpell${n}Id`]);
 
-			spell.imageUrl = getSummonerSpellImageUrl(spell.id);
+		spell.imageUrl = getSummonerSpellImageUrl(spell.id);
 
-			return spell;
-		});
+		return spell;
+	});
+
+	const getStatsTableData = () => {
+		const stats = [
+			{
+				label: 'match.kda',
+				value: `${me.kills}/${me.deaths}/${me.assists}`
+			},
+			{
+				label: 'match.cs',
+				value: Math.round(me.totalMinionsKilled + me.neutralMinionsKilled)
+			},
+			{
+				label: 'match.csm',
+				value:
+					Math.round(
+						((me.totalMinionsKilled + me.neutralMinionsKilled) / (match.gameDuration / 60)) * 100
+					) / 100
+			}
+		];
+
+		if (match.queueId !== 430) {
+			stats.push({
+				label: 'match.vs',
+				value: me.visionScore
+			});
+		}
+
+		return stats;
 	};
 
 	onMount(async () => {
@@ -51,6 +79,8 @@
 		mainRuneImage = images[0];
 		secondaryStyleImage = images[1];
 	});
+
+	console.log(match.matchId);
 </script>
 
 <div
@@ -66,7 +96,7 @@
 					alt="champion square art"
 				/>
 				<div class="flex justify-between px-1">
-					{#each getSummonerSpells() as spell}
+					{#each summonerSpells as spell}
 						<img
 							class="block w-6 h-6 rounded-md"
 							src={spell.imageUrl}
@@ -108,42 +138,9 @@
 			</div>
 		</div>
 	</div>
-	<table class="mt-auto">
-		<tbody>
-			<tr>
-				<td class="text-right pr-1 font-bold">{me.kills}/{me.deaths}/{me.assists}</td>
-				<th class="text-gray-400 text-left font-sans-secondary font-bold text-sm"
-					>{$t('match.kda')}</th
-				>
-			</tr>
-			<tr>
-				<td class="text-right pr-1 font-bold">
-					{me.totalMinionsKilled}
-				</td>
-				<th class="text-gray-400 text-left font-sans-secondary font-bold text-sm"
-					>{$t('match.cs')}</th
-				>
-			</tr>
-			<tr>
-				<td class="text-right pr-1 font-bold">
-					{Math.round((me.totalMinionsKilled / (match.gameDuration / 60)) * 100) / 100}
-				</td>
-				<th class="text-gray-400 text-left font-sans-secondary font-bold text-sm"
-					>{$t('match.csm')}</th
-				>
-			</tr>
-			{#if match.queueId !== 450}
-				<tr>
-					<td class="text-right pr-1 font-bold">
-						{me.visionScore}
-					</td>
-					<th class="text-gray-400 text-left font-sans-secondary font-bold text-sm"
-						>{$t('match.vs')}</th
-					>
-				</tr>
-			{/if}
-		</tbody>
-	</table>
+	<div class="mt-auto">
+		<StatTable stats={getStatsTableData()} />
+	</div>
 	<div class="flex">
 		<div
 			class="py-1 px-2 bg-team-blue bg-opacity-10 rounded-l-lg w-48 flex flex-col justify-center"

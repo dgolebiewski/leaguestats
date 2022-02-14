@@ -190,6 +190,7 @@ export const fetchMatches = async (region, summonerName, options = {}) => {
 				deaths: participant.deaths,
 				assists: participant.assists,
 				totalMinionsKilled: participant.totalMinionsKilled,
+				neutralMinionsKilled: participant.neutralMinionsKilled,
 				challenges: participant.challenges,
 				championId: participant.championId,
 				championLevel: participant.champLevel,

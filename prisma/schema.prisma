@@ -51,25 +51,26 @@ model MatchTeam {
 }
 
 model MatchParticipant {
-  id                 Int    @id @default(autoincrement())
-  match              Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
-  matchId            Int
-  puuid              String
-  summonerName       String
-  profileIconId      Int
-  kills              Int
-  deaths             Int
-  assists            Int
-  totalMinionsKilled Int
-  challenges         Json?
-  championId         Int
-  championLevel      Int
-  items              Json
-  lane               String
-  teamPosition       String
-  teamId             Int
-  summonerSpell1Id   Int?
-  summonerSpell2Id   Int?
-  perks              Json?
-  visionScore        Int
+  id                   Int    @id @default(autoincrement())
+  match                Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  matchId              Int
+  puuid                String
+  summonerName         String
+  profileIconId        Int
+  kills                Int
+  deaths               Int
+  assists              Int
+  totalMinionsKilled   Int
+  neutralMinionsKilled Int
+  challenges           Json?
+  championId           Int
+  championLevel        Int
+  items                Json
+  lane                 String
+  teamPosition         String
+  teamId               Int
+  summonerSpell1Id     Int?
+  summonerSpell2Id     Int?
+  perks                Json?
+  visionScore          Int
 }

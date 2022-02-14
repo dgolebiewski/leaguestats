@@ -2,15 +2,29 @@
 	import { t } from '$lib/i18n';
 	import { getChampionSquareImageUrl } from '$lib/util/assets';
 	import { getWinrateTextColor } from '$lib/util/style';
+	import collapse from 'svelte-collapse';
 	import SidebarPanel from './SidebarPanel.svelte';
 
 	export let loading = false;
 	export let recentChampions = [];
+
+	let expandedChampions = [];
+
+	const toggleChampion = (id) => {
+		const index = expandedChampions.findIndex((c) => c === id);
+		if (index < 0) {
+			expandedChampions = [...expandedChampions, id];
+		} else {
+			let _expandedChampions = [...expandedChampions];
+			_expandedChampions.splice(index, 1);
+			expandedChampions = _expandedChampions;
+		}
+	};
 </script>
 
 <SidebarPanel {loading} title={$t('summoner.recentChampions')}>
 	{#each recentChampions as item}
-		<div class="flex justify-between py-1">
+		<div class="flex justify-between py-1" on:click={toggleChampion(item.champion.id)}>
 			<div class="flex">
 				<img
 					class="block w-10 h-10 mr-2 rounded-lg border border-gray-500"
@@ -36,6 +50,9 @@
 					})}
 				</p>
 			</div>
+		</div>
+		<div use:collapse={{ open: expandedChampions.includes(item.champion.id) }}>
+			<h4 class="text-3xl">TEST</h4>
 		</div>
 	{/each}
 </SidebarPanel>
