@@ -22,7 +22,9 @@
 	import { t } from '$lib/i18n';
 	import Header from '$components/Header.svelte';
 	import PageTransition from '$components/PageTransition.svelte';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import '$assets/app.css';
+	import LoadingBar from '$components/LoadingBar.svelte';
 
 	export let url;
 </script>
@@ -31,9 +33,26 @@
 	<title>{$t('common.title')}</title>
 </svelte:head>
 
+<LoadingBar />
+
 {#if url.pathname !== '/'}
 	<Header />
 {/if}
 <PageTransition refresh={url.pathname}>
 	<slot />
 </PageTransition>
+
+<SvelteToast />
+
+<style>
+	:root {
+		--toastContainerTop: 2rem;
+		--toastContainerRight: auto;
+		--toastContainerBottom: auto;
+		--toastContainerLeft: calc(50vw - 8rem);
+	}
+
+	._toastBar {
+		display: none !important;
+	}
+</style>

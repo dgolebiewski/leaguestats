@@ -82,31 +82,25 @@ export const fetchSummoner = async (region, summonerName, refresh = false) => {
 };
 
 export const fetchMatches = async (region, summonerName, options = {}) => {
-	let query = {
+	let summoner = await prisma.summoner.findFirst({
 		where: {
 			name: summonerName,
 			region: region.platformPrefix
-		}
-	};
-
-	if (!options.refresh) {
-		query = {
-			...query,
-			include: {
-				matches: {
-					include: {
-						teams: true,
-						participants: true
-					},
-					orderBy: {
-						gameStart: 'asc'
-					}
+		},
+		include: {
+			matches: {
+				include: {
+					teams: true,
+					participants: true
+				},
+				skip: options.start || 0,
+				take: options.count || 10,
+				orderBy: {
+					gameStart: 'desc'
 				}
 			}
-		};
-	}
-
-	let summoner = await prisma.summoner.findFirst(query);
+		}
+	});
 
 	if (!summoner) {
 		return [];
@@ -115,12 +109,6 @@ export const fetchMatches = async (region, summonerName, options = {}) => {
 	if (!options.refresh && summoner.matches.length > 0) {
 		return summoner.matches;
 	}
-
-	await prisma.match.deleteMany({
-		where: {
-			summonerId: summoner.id
-		}
-	});
 
 	const matchIds = await fetchRiotApi(
 		`/match/v5/matches/by-puuid/${summoner.puuid}/ids`,
@@ -232,6 +220,8 @@ export const fetchMatches = async (region, summonerName, options = {}) => {
 		where: {
 			summonerId: summoner.id
 		},
+		skip: options.start || 0,
+		take: options.count || 10,
 		include: {
 			teams: true,
 			participants: true

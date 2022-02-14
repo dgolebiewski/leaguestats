@@ -33,7 +33,7 @@
 			}}
 		/>
 		<div class="absolute top-0 font-sans-secondary text-sm leading-4 text-center w-full py-4">
-			{(wins / (wins + losses)) * 100}%
+			{Math.round((wins / (wins + losses)) * 100)}%
 		</div>
 	</div>
 {/if}

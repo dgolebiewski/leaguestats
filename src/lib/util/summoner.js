@@ -104,5 +104,5 @@ export const getSummonerRecentTeammates = (summoner) => {
 	teammates = teammates.filter((t) => t.gameCount > 1);
 	teammates.sort((a, b) => b.gameCount - a.gameCount);
 
-	return teammates;
+	return teammates.slice(0, 3);
 };

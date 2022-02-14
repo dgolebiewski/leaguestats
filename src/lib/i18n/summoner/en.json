@@ -12,5 +12,9 @@
 	"winrate": "{{ value }}% WR",
 	"kda": "{{ value }} KDA",
 	"recentTeammates": "recent teammates",
-	"refresh": "refresh"
+	"refresh": "refresh",
+	"warningAlreadyRefreshing": "whooaaaa... we're already refreshing the data",
+	"noResults": "no results",
+	"noMoreResults": "no more results",
+	"matchesLoadError": "an error occured"
 }

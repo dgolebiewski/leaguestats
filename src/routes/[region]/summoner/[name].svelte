@@ -21,6 +21,8 @@
 
 <script>
 	import { t } from '$lib/i18n';
+	import { toast } from '@zerodevx/svelte-toast';
+	import InfiniteLoading from 'svelte-infinite-loading';
 	import Breadcrumbs from '$components/Breadcrumbs.svelte';
 	import RankedPanel from '$components/RankedPanel.svelte';
 	import WinrateChart from '$components/WinrateChart.svelte';
@@ -45,6 +47,14 @@
 
 	const refresh = async () => {
 		if (isRefreshing) {
+			toast.push($t('summoner.warningAlreadyRefreshing'), {
+				dismissable: false,
+				duration: 1500,
+				theme: {
+					'--toastBackground': '#facc15',
+					'--toastBarBackground': '#ca8a04'
+				}
+			});
 			return;
 		}
 
@@ -57,6 +67,32 @@
 		}
 
 		isRefreshing = false;
+	};
+
+	const loadMore = async (e) => {
+		try {
+			const response = await fetch(
+				`/api/${region}/summoner/${summoner.name}/matches?start=${summoner.matches.length}`
+			);
+
+			if (response.ok) {
+				const matches = (await response.json()).matches;
+
+				if (matches.length > 0) {
+					summoner = {
+						...summoner,
+						matches: [...summoner.matches, ...matches]
+					};
+					e.detail.loaded();
+				} else {
+					e.detail.complete();
+				}
+			} else {
+				e.detail.error();
+			}
+		} catch (err) {
+			e.detail.error();
+		}
 	};
 
 	$: stats = getSummonerStats(summoner);
@@ -127,14 +163,26 @@
 
 				{#if recentTeammates && recentTeammates.length}
 					<div class="h-4" />
-					<RecentTeammates loading={isRefreshing} {recentTeammates} />
+					<RecentTeammates loading={isRefreshing} {region} {recentTeammates} />
 				{/if}
 			</div>
 			<div class="col-span-9">
 				{#each summoner.matches as match}
 					<MatchPanel loading={isRefreshing} {match} summonerPuuid={summoner.puuid} />
 				{/each}
-				<Spinner />
+
+				<InfiniteLoading on:infinite={loadMore}>
+					<Spinner slot="spinner" />
+					<span slot="noResults">
+						{$t('summoner.noResults')}
+					</span>
+					<span slot="noMore">
+						{$t('summoner.noMoreResults')}
+					</span>
+					<span slot="error">
+						{$t('summoner.matchesLoadError')}
+					</span>
+				</InfiniteLoading>
 			</div>
 		</div>
 	</div>
