@@ -14,7 +14,14 @@
 	"recentTeammates": "recent teammates",
 	"refresh": "refresh",
 	"warningAlreadyRefreshing": "whooaaaa... we're already refreshing the data",
+	"warningCouldNotRefresh": "sorry... we coudn't refresh the data",
 	"noResults": "no results",
 	"noMoreResults": "no more results",
-	"matchesLoadError": "an error occured"
+	"matchesLoadError": "an error occured",
+	"avgCs": "AVG CS",
+	"avgCsm": "AVG CSM",
+	"avgKills": "AVG KILLS",
+	"avgDeaths": "AVG DEATHS",
+	"avgAssists": "AVG ASSISTS",
+	"avgGameTime": "AVG GAME TIME"
 }

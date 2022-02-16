@@ -4,6 +4,7 @@
 	import { getWinrateTextColor } from '$lib/util/style';
 	import collapse from 'svelte-collapse';
 	import SidebarPanel from './SidebarPanel.svelte';
+	import StatTable from './StatTable.svelte';
 
 	export let loading = false;
 	export let recentChampions = [];
@@ -24,7 +25,10 @@
 
 <SidebarPanel {loading} title={$t('summoner.recentChampions')}>
 	{#each recentChampions as item}
-		<div class="flex justify-between py-1" on:click={toggleChampion(item.champion.id)}>
+		<div
+			class="flex justify-between py-1 -mx-4 px-4 hover:bg-gray-750 transition-colors cursor-pointer"
+			on:click={toggleChampion(item.champion.id)}
+		>
 			<div class="flex">
 				<img
 					class="block w-10 h-10 mr-2 rounded-lg border border-gray-500"
@@ -51,8 +55,14 @@
 				</p>
 			</div>
 		</div>
-		<div use:collapse={{ open: expandedChampions.includes(item.champion.id) }}>
-			<h4 class="text-3xl">TEST</h4>
+		<div
+			use:collapse={{ open: expandedChampions.includes(item.champion.id) }}
+			class="h-0 overflow-hidden flex justify-center"
+		>
+			<!-- <h4 class="text-3xl">TEST</h4> -->
+			<div class="py-3">
+				<StatTable stats={item.stats} />
+			</div>
 		</div>
 	{/each}
 </SidebarPanel>

@@ -1,4 +1,5 @@
 import { getChampionByKey } from './assets';
+import { formatTime } from './time';
 
 export const getSummonerStats = (summoner) => {
 	const stats = {
@@ -35,7 +36,7 @@ export const getSummonerStats = (summoner) => {
 };
 
 export const getSummonerRecentChampions = (summoner, maxCount = 3) => {
-	const recentChamps = [];
+	let recentChamps = [];
 
 	summoner.matches.forEach((match) => {
 		const participant = match.participants.find((p) => p.puuid === summoner.puuid);
@@ -54,7 +55,9 @@ export const getSummonerRecentChampions = (summoner, maxCount = 3) => {
 				wins: team.win ? 1 : 0,
 				kills: participant.kills,
 				deaths: participant.deaths,
-				assists: participant.assists
+				assists: participant.assists,
+				cs: participant.totalMinionsKilled + participant.neutralMinionsKilled,
+				totalGameDuration: match.gameDuration
 			};
 
 			recentChamps.push(champStats);
@@ -64,12 +67,45 @@ export const getSummonerRecentChampions = (summoner, maxCount = 3) => {
 			champStats.kills += participant.kills;
 			champStats.deaths += participant.deaths;
 			champStats.assists += participant.assists;
+			champStats.cs += participant.totalMinionsKilled + participant.neutralMinionsKilled;
+			champStats.totalGameDuration += match.gameDuration;
 		}
 	});
 
 	recentChamps.sort((a, b) => b.gameCount - a.gameCount);
 
-	return recentChamps.slice(0, maxCount);
+	recentChamps = recentChamps.slice(0, maxCount);
+
+	recentChamps.forEach((champion) => {
+		champion.stats = [
+			{
+				label: 'summoner.avgCs',
+				value: Math.round((champion.cs / champion.gameCount) * 100) / 100
+			},
+			{
+				label: 'summoner.avgCsm',
+				value: Math.round((champion.cs / (champion.totalGameDuration / 60)) * 100) / 100
+			},
+			{
+				label: 'summoner.avgKills',
+				value: Math.round((champion.kills / champion.gameCount) * 100) / 100
+			},
+			{
+				label: 'summoner.avgDeaths',
+				value: Math.round((champion.deaths / champion.gameCount) * 100) / 100
+			},
+			{
+				label: 'summoner.avgAssists',
+				value: Math.round((champion.assists / champion.gameCount) * 100) / 100
+			},
+			{
+				label: 'summoner.avgGameTime',
+				value: formatTime(champion.totalGameDuration / champion.gameCount)
+			}
+		];
+	});
+
+	return recentChamps;
 };
 
 export const getSummonerRecentTeammates = (summoner) => {

@@ -79,8 +79,6 @@
 		mainRuneImage = images[0];
 		secondaryStyleImage = images[1];
 	});
-
-	console.log(match.matchId);
 </script>
 
 <div

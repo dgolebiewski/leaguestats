@@ -64,6 +64,15 @@
 
 		if (response.ok) {
 			summoner = (await response.json()).summoner;
+		} else {
+			toast.push($t('summoner.warningCouldNotRefresh'), {
+				dismissable: false,
+				duration: 3000,
+				theme: {
+					'--toastBackground': '#facc15',
+					'--toastBarBackground': '#ca8a04'
+				}
+			});
 		}
 
 		isRefreshing = false;
